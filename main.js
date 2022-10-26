@@ -29,6 +29,7 @@ function createWindow() {
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
+  //Automatically opens devtools allowing us to debug immediately
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
