@@ -22,13 +22,20 @@ function createWindow() {
       contextIsolation: false,
       nodeIntegration: true,
     },
+    //hiding window until all content is loaded:
+    backgroundColor: "#2B2E3B",
+    //show: false,
   });
 
+  //will only fire one,
+  //mainWindow.once("ready-to-show", mainWindow.show); //what,where; will still flicker but only because of css rendering, not html
+
   // Load index.html into the new BrowserWindow
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("index.html"); //loads local file
+  //mainWindow.loadURL("https://www.roblox.com/home"); //loads url
 
   // Open DevTools - Remove for PRODUCTION!
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   //Automatically opens devtools allowing us to debug immediately
 
   // Listen for window being closed
