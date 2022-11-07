@@ -8,7 +8,7 @@ console.log(colors.rainbow("Herro"));
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow, secondaryWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
@@ -27,11 +27,31 @@ function createWindow() {
     //show: false,
   });
 
+  secondaryWindow = new BrowserWindow({
+    width: 600,
+    height: 300,
+    parent: mainWindow,
+    modal: true, //shares same top bar as parent
+    show: false,
+    webPreferences: {
+      // --- !! IMPORTANT !! ---
+      // Disable 'contextIsolation' to allow 'nodeIntegration'
+      // 'contextIsolation' defaults to "true" as from Electron v12
+      contextIsolation: false,
+      nodeIntegration: true,
+    },
+    //hiding window until all content is loaded:
+    backgroundColor: "#2B2E3B",
+    //show: false,
+  });
+
   //will only fire one,
   //mainWindow.once("ready-to-show", mainWindow.show); //what,where; will still flicker but only because of css rendering, not html
 
   // Load index.html into the new BrowserWindow
-  mainWindow.loadFile("index.html"); //loads local file
+  mainWindow.loadFile("index.html");
+  secondaryWindow.loadFile("secondary.html");
+  //loads local file
   //mainWindow.loadURL("https://www.roblox.com/home"); //loads url
 
   // Open DevTools - Remove for PRODUCTION!
@@ -42,7 +62,22 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  secondaryWindow.on("closed", () => {
+    mainWindow = null;
+  });
 }
+
+setTimeout(() => {
+  secondaryWindow.show();
+  setTimeout(() => {
+    //secondaryWindow.hide();
+    secondaryWindow.close();
+    secondaryWindow = null;
+  }, 3000);
+}, 2000);
+
+//a timer to SHOW then after a while will hide again; but we rather close it and set it to nothing
 
 // Electron `app` is ready
 app.on("ready", createWindow);
