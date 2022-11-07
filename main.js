@@ -15,6 +15,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    frame: false,
     webPreferences: {
       // --- !! IMPORTANT !! ---
       // Disable 'contextIsolation' to allow 'nodeIntegration'
@@ -27,7 +28,8 @@ function createWindow() {
     //show: false,
   });
 
-  secondaryWindow = new BrowserWindow({
+  /*
+   secondaryWindow = new BrowserWindow({
     width: 600,
     height: 300,
     parent: mainWindow,
@@ -44,13 +46,17 @@ function createWindow() {
     backgroundColor: "#2B2E3B",
     //show: false,
   });
+ */
 
   //will only fire one,
   //mainWindow.once("ready-to-show", mainWindow.show); //what,where; will still flicker but only because of css rendering, not html
 
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
-  secondaryWindow.loadFile("secondary.html");
+  /*
+ 
+   secondaryWindow.loadFile("secondary.html");
+ */
   //loads local file
   //mainWindow.loadURL("https://www.roblox.com/home"); //loads url
 
@@ -63,12 +69,15 @@ function createWindow() {
     mainWindow = null;
   });
 
-  secondaryWindow.on("closed", () => {
+  /*
+    secondaryWindow.on("closed", () => {
     mainWindow = null;
   });
+  */
 }
 
-setTimeout(() => {
+/*
+  setTimeout(() => {
   secondaryWindow.show();
   setTimeout(() => {
     //secondaryWindow.hide();
@@ -76,6 +85,7 @@ setTimeout(() => {
     secondaryWindow = null;
   }, 3000);
 }, 2000);
+*/
 
 //a timer to SHOW then after a while will hide again; but we rather close it and set it to nothing
 
