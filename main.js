@@ -16,6 +16,7 @@ function createWindow() {
     width: 1000,
     height: 800,
     frame: false,
+    titleBarStyle: "hidden",
     webPreferences: {
       // --- !! IMPORTANT !! ---
       // Disable 'contextIsolation' to allow 'nodeIntegration'
