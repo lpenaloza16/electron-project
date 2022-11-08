@@ -15,6 +15,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    minWidth: 640,
+    minHeight: 480,
     frame: false,
     titleBarStyle: "hidden",
     webPreferences: {
@@ -69,6 +71,10 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  // mainWindow.on("closed", () => {
+  //   console.log(`tested`);
+  // });
 
   /*
     secondaryWindow.on("closed", () => {
