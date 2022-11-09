@@ -1,6 +1,8 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, webContents } = require("electron");
 const windowStateKeeper = require("electron-window-state");
+
+//we are importing "web contents module too"
 
 //colors package import
 const colors = require("colors");
@@ -39,6 +41,15 @@ function createWindow() {
     //hiding window until all content is loaded:
     backgroundColor: "#2B2E3B",
     //show: false,
+  });
+
+  //reference to window contents
+  let wc = mainWindow.webContents;
+  console.log(webContents.getAllWebContents());
+
+  //will log the event key
+  wc.on("before-input-event", (e, input) => {
+    console.log(`${input.key} : ${input.type}`);
   });
 
   //appling window management to mainWindow
