@@ -1,5 +1,6 @@
 // Modules
 const { app, BrowserWindow } = require("electron");
+const windowStateKeeper = require("electron-window-state");
 
 //colors package import
 const colors = require("colors");
@@ -12,9 +13,18 @@ let mainWindow, secondaryWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  //implenting window state from library -> mainWindow is reading the state off the winState Object
+  //also includes cordinates
+  let winState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800,
+  });
+
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: winState.width,
+    height: winState.height,
+    x: winState.x,
+    y: winState.y,
     minWidth: 640,
     minHeight: 480,
     frame: false,
@@ -30,6 +40,9 @@ function createWindow() {
     backgroundColor: "#2B2E3B",
     //show: false,
   });
+
+  //appling window management to mainWindow
+  winState.manage(mainWindow);
 
   /*
    secondaryWindow = new BrowserWindow({
