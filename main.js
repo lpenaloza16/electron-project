@@ -45,7 +45,10 @@ function createWindow() {
 
   //reference to window contents
   let wc = mainWindow.webContents;
-  console.log(webContents.getAllWebContents());
+  // console.log(webContents.getAllWebContents());
+  wc.on("did-finish-load", () => {
+    console.log(`it is all loaded`);
+  });
 
   //will log the event key
   wc.on("before-input-event", (e, input) => {
