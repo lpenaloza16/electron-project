@@ -11,7 +11,7 @@ console.log(colors.rainbow("Herro"));
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow, secondaryWindow;
+let mainWindow, secondaryWindow, secWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
@@ -43,12 +43,28 @@ function createWindow() {
     //show: false,
   });
 
+  mainWindow = new BrowserWindow({
+    width: 640,
+    height: 480,
+    webPreferences: {
+      // --- !! IMPORTANT !! ---
+      // Disable 'contextIsolation' to allow 'nodeIntegration'
+      // 'contextIsolation' defaults to "true" as from Electron v12
+      contextIsolation: false,
+      nodeIntegration: true,
+    },
+  });
+
   //reference to window contents
   let wc = mainWindow.webContents;
   // console.log(webContents.getAllWebContents());
   wc.on("did-finish-load", () => {
     console.log(`it is all loaded`);
   });
+
+  //a session is an object for saving state data related to the web content
+  let ses = mainWindow.webContents.session;
+  console.log(ses);
 
   //will log the event key
   wc.on("before-input-event", (e, input) => {
