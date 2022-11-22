@@ -1,6 +1,7 @@
 // Modules
-const { app, BrowserWindow, webContents } = require("electron");
+const { app, BrowserWindow, webContents, session } = require("electron");
 const windowStateKeeper = require("electron-window-state");
+//can get session from the session module ^
 
 //we are importing "web contents module too"
 
@@ -15,6 +16,9 @@ let mainWindow, secondaryWindow, secWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  // let customSes = session.fromPartition("persist:part1"); //paritions are parts of storage
+
+  //makes object persistent
   //implenting window state from library -> mainWindow is reading the state off the winState Object
   //also includes cordinates
   let winState = windowStateKeeper({
@@ -43,7 +47,7 @@ function createWindow() {
     //show: false,
   });
 
-  mainWindow = new BrowserWindow({
+  secWindow = new BrowserWindow({
     width: 640,
     height: 480,
     webPreferences: {
@@ -52,8 +56,13 @@ function createWindow() {
       // 'contextIsolation' defaults to "true" as from Electron v12
       contextIsolation: false,
       nodeIntegration: true,
+      partition: "persist:part1",
+      //will create a new parition if it does not already exists
+      // session: customSes,
     },
   });
+
+  //loading customSes variable
 
   //reference to window contents
   let wc = mainWindow.webContents;
@@ -64,6 +73,8 @@ function createWindow() {
 
   //a session is an object for saving state data related to the web content
   let ses = mainWindow.webContents.session;
+  let ses2 = secWindow.webContents.session;
+  let defaultSes = session.defaultSession; //most logical
   console.log(ses);
 
   //will log the event key
@@ -96,9 +107,10 @@ function createWindow() {
 
   //will only fire one,
   //mainWindow.once("ready-to-show", mainWindow.show); //what,where; will still flicker but only because of css rendering, not html
-
+  ses.clearStorageData(); //will clear cookies for session for main window
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
+  secWindow.loadFile("index.html");
   /*
  
    secondaryWindow.loadFile("secondary.html");
