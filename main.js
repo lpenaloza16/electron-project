@@ -16,6 +16,19 @@ let mainWindow, secondaryWindow, secWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  let ses = session.defaultSession;
+
+  //getCookies function
+  let getCookies = () => {
+    ses.cookies
+      .get({ name: "cookie" })
+      .then((cookies) => {
+        console.log(cookies);
+      })
+      .catch((errors) => {
+        console.log(errors);
+      }); //making it empty can make it recieve all cookies
+  };
   // let customSes = session.fromPartition("persist:part1"); //paritions are parts of storage
 
   //makes object persistent
@@ -72,7 +85,7 @@ function createWindow() {
   });
 
   //a session is an object for saving state data related to the web content
-  let ses = mainWindow.webContents.session;
+  //let ses = mainWindow.webContents.session;
   let ses2 = secWindow.webContents.session;
   let defaultSes = session.defaultSession; //most logical
   console.log(ses);
@@ -110,7 +123,28 @@ function createWindow() {
   ses.clearStorageData(); //will clear cookies for session for main window
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
-  secWindow.loadFile("index.html");
+
+  let cookie = {
+    url: "https://myappdomain.com",
+    name: "cookie",
+    value: "electron",
+    // expirationDate: 1622818789,
+  };
+  ses.cookies.set(cookie).then(() => {
+    console.log(`cookie 1 set`);
+    getCookies();
+  });
+
+  ses.cookies.remove("https://myappdomain.com", "cookie").then(() => {
+    getCookies();
+  });
+
+  // mainWindow.webContents.on("did-finish-load", (e) => {
+  //   getCookies();
+  // });
+
+  //returns a promise once the cookie is created
+  // secWindow.loadFile("index.html");
   /*
  
    secondaryWindow.loadFile("secondary.html");
