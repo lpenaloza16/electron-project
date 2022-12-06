@@ -17,6 +17,25 @@ let mainWindow, secondaryWindow, secWindow;
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
   let ses = session.defaultSession;
+  // will download -> gives full access to how we download an item
+  ses.on("will-download", (e, downloadItem, webContents) => {
+    // console.log(`starting download!`);
+    let fileName = downloadItem.getFilename();
+    let fileSize = downloadItem.getTotalBytes();
+    //Save to desktop
+    downloadItem.setSavePath(app.getPath("desktop") + `/${fileName}`);
+
+    downloadItem.on("update", (e, state) => {
+      let recieved = downloadItem.getReceivedBytes();
+
+      if (state === "progressing" && recieved) {
+        let progress = Math.round((recieved / fileSize) * 100);
+        // webContents.executeJavaScript(`window.progress.value =${progress}`);
+        document.getElementById("progress").value = `${progress}`;
+        // console.log(progress)
+      }
+    });
+  });
 
   //getCookies function
   let getCookies = () => {

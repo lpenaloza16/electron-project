@@ -3,3 +3,4 @@
 // All of the Node.js APIs are available in this process.
 
 // alert("simple chromium alert");
+window.progress = document.getElementById("progress");
